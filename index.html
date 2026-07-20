@@ -78,7 +78,7 @@
             <h3>my portfolio</h3>
             <p>a few selections from events i've hosted and professional work i've done.</p>
           </div>
-          <a href="#" class="work-link" aria-label="View my portfolio">view <span aria-hidden="true">→</span></a>
+          <button type="button" class="work-link" data-modal-open="portfolio-modal" aria-label="View my portfolio">view <span aria-hidden="true">→</span></button>
         </article>
 
         <article class="work-item">
@@ -120,6 +120,96 @@
     </div>
   </section>
 
+  <!-- PORTFOLIO MODAL -->
+  <div class="modal" id="portfolio-modal" hidden>
+    <div class="modal-backdrop" data-modal-close></div>
+
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="portfolio-modal-title">
+      <button type="button" class="modal-close" data-modal-close aria-label="Close portfolio">×</button>
+
+      <header class="modal-header">
+        <span class="section-eyebrow">portfolio</span>
+        <h2 class="modal-title" id="portfolio-modal-title">my portfolio</h2>
+        <p class="modal-sub">a few selections from events i've hosted and professional work i've done.</p>
+      </header>
+
+      <section class="gallery-group">
+        <h3 class="gallery-group-title">celery's joe apartment cafe</h3>
+        <p class="gallery-caption">celery's joe in my tiny nyc apartment living room</p>
+        <div class="gallery-grid">
+          <figure class="gallery-item">
+            <img src="portfolio/img_7308.jpg" alt="Writing the Celery's Joe menu in marker on a kitchen cabinet" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_2297.jpg" alt="Guests in the kitchen beside the handwritten Celery's Joe menu" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_2300.jpg" alt="The full spread of pastries and coffee laid out on the table" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="gallery-group">
+        <h3 class="gallery-group-title">upper room cafe x celery's joe</h3>
+        <p class="gallery-caption">80+ people on logan's roof, featuring a successful book exchange!</p>
+        <div class="gallery-grid">
+          <figure class="gallery-item">
+            <img src="portfolio/img_6483.jpg" alt="Holding the pay-what-you-can chalkboard menu on the rooftop" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_9262.jpg" alt="Handing over an iced drink with the Empire State Building behind" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_9283.jpg" alt="Rooftop crowd at the café, holding a copy of Intermezzo" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="gallery-group">
+        <h3 class="gallery-group-title">spring into spring</h3>
+        <p class="gallery-caption">celery's joe in central park!</p>
+        <div class="gallery-grid">
+          <figure class="gallery-item gallery-item--poster">
+            <img src="portfolio/img_0603.jpg" alt="Spring Into Spring menu: blackberry muffin cookie, apricot canelé, mango sago, egg tart, soffioni abruzzesi, sesame plum cake" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_0635.jpg" alt="Laughing beside the bake table at a picnic in the park" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_0669.jpg" alt="Apricot canelés cooling on strawberry-print napkins" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_0670.jpg" alt="Blackberry cookies next to a bowl of fresh blackberries" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="gallery-group">
+        <h3 class="gallery-group-title">winter celebrations</h3>
+        <p class="gallery-caption">making use of my apartment lounge - elevated crafts night</p>
+        <div class="gallery-grid">
+          <figure class="gallery-item">
+            <img src="portfolio/img_9430.jpg" alt="Charcuterie boards and hand-lettered place cards set out for a party" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_6861.jpg" alt="Mini canvas portraits guests drew of each other in marker" loading="lazy" />
+          </figure>
+          <figure class="gallery-item">
+            <img src="portfolio/img_9447.jpg" alt="Two guests laughing while holding up their portrait canvases" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button type="button" class="lightbox-close" data-lightbox-close aria-label="Close image">×</button>
+    <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="Previous image">‹</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <button type="button" class="lightbox-nav lightbox-next" data-lightbox-next aria-label="Next image">›</button>
+  </div>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer-inner">
@@ -127,6 +217,84 @@
       <p>© 2026</p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var modal = document.getElementById('portfolio-modal');
+      var lightbox = document.getElementById('lightbox');
+      var lightboxImg = document.getElementById('lightbox-img');
+      var photos = [].slice.call(modal.querySelectorAll('.gallery-item img'));
+      var current = 0;
+      var lastFocused = null;
+
+      function lockScroll(on) {
+        document.body.style.overflow = on ? 'hidden' : '';
+      }
+
+      function openModal() {
+        lastFocused = document.activeElement;
+        modal.hidden = false;
+        lockScroll(true);
+        modal.querySelector('.modal-close').focus();
+      }
+
+      function closeModal() {
+        modal.hidden = true;
+        if (lightbox.hidden) lockScroll(false);
+        if (lastFocused) lastFocused.focus();
+      }
+
+      function showPhoto(i) {
+        current = (i + photos.length) % photos.length;
+        lightboxImg.src = photos[current].src;
+        lightboxImg.alt = photos[current].alt;
+      }
+
+      function openLightbox(i) {
+        showPhoto(i);
+        lightbox.hidden = false;
+        document.body.classList.add('lightbox-open');
+        lockScroll(true);
+        lightbox.querySelector('.lightbox-close').focus();
+      }
+
+      function closeLightbox() {
+        lightbox.hidden = true;
+        document.body.classList.remove('lightbox-open');
+        lightboxImg.src = '';
+        if (modal.hidden) lockScroll(false);
+        else modal.querySelector('.modal-close').focus();
+      }
+
+      document.querySelectorAll('[data-modal-open]').forEach(function (btn) {
+        btn.addEventListener('click', openModal);
+      });
+      modal.querySelectorAll('[data-modal-close]').forEach(function (btn) {
+        btn.addEventListener('click', closeModal);
+      });
+
+      photos.forEach(function (img, i) {
+        img.addEventListener('click', function () { openLightbox(i); });
+      });
+
+      lightbox.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
+      lightbox.querySelector('[data-lightbox-prev]').addEventListener('click', function () { showPhoto(current - 1); });
+      lightbox.querySelector('[data-lightbox-next]').addEventListener('click', function () { showPhoto(current + 1); });
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (!lightbox.hidden) {
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') showPhoto(current - 1);
+          if (e.key === 'ArrowRight') showPhoto(current + 1);
+          return;
+        }
+        if (!modal.hidden && e.key === 'Escape') closeModal();
+      });
+    })();
+  </script>
 
 </body>
 </html>
