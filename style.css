@@ -548,7 +548,8 @@ body.lightbox-open .modal-close { visibility: hidden; }
 .modal-sub {
   font-size: 1rem;
   color: var(--mid);
-  max-width: 480px;
+  max-width: 620px;
+  text-wrap: balance;
 }
 
 /* --- gallery groups --- */
